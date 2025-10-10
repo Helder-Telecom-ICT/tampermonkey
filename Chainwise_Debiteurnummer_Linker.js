@@ -1,14 +1,13 @@
 // ==UserScript==
-// @name         Chainwise Debiteurnummer Linker
-// @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Zoekt naar 'DebiteurNr' (robuust), extraheert de nummerieke waarde en verandert deze in een directe link naar Heldere Inzage.
-// @author       Gijs Hofman
-// @match        https://heldertelecom.chainwisehosted.nl/modules/relatiebeheer/bedr_vw.asp*
-// @grant        none
+// @name         Chainwise Debiteurnummer Linker
+// @namespace    http://tampermonkey.net/
+// @version      1.1
+// @description  Zoekt naar 'DebiteurNr' (robuust), extraheert de nummerieke waarde en verandert deze in een directe link naar Heldere Inzage.
+// @author       Gijs Hofman
+// @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/calls_vw.asp*
+// @grant        none
 // @run-at       document-idle
 // ==/UserScript==
-
 (function() {
     'use strict';
 
