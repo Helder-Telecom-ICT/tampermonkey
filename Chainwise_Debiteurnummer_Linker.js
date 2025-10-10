@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Chainwise Debiteurnummer Linker (v1.1)
+// @name         Chainwise Debiteurnummer Linker
 // @namespace    http://tampermonkey.net/
 // @version      1.1
 // @description  Zoekt naar 'DebiteurNr' (robuust), extraheert de nummerieke waarde en verandert deze in een directe link naar Heldere Inzage.
