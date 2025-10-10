@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Chainwise Optimalisatie (v2.5) - Statusoverzichten
+// @name         Chainwise Optimalisatie Statusoverzichten
 // @namespace    http://tampermonkey.net/
 // @version      2.5
 // @description  Mutaties aan Status overzichten in Chainwise zodat het overzichterlijker is.
