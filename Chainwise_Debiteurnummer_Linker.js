@@ -7,6 +7,7 @@
 // @match        https://heldertelecom.chainwisehosted.nl/modules/relatiebeheer/bedr_vw.asp*
 // @grant        none
 // @run-at       document-idle
+// @license MIT
 // ==/UserScript==
 (function() {
     'use strict';
