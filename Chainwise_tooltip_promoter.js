@@ -6,6 +6,7 @@
 // @author       Gijs Hofman
 // @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/calls_vw.asp*
 // @grant        none
+// @license MIT
 // ==/UserScript==
 
 (function() {
