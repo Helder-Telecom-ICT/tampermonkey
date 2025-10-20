@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chainwise Tooltip Promotor
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Haalt een specifieke tooltip-tekst op en toont deze in een rode balk onder de paginatitel.
 // @author       Gijs Hofman
 // @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/calls_vw.asp*
