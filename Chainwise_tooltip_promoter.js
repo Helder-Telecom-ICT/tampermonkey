@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Tooltip Promotor
+// @name         Chainwise Tooltip Promotor
 // @namespace    http://tampermonkey.net/
 // @version      1.1
 // @description  Haalt een specifieke tooltip-tekst op en toont deze in een rode balk onder de paginatitel.
