@@ -4,7 +4,7 @@
 // @version      1.1
 // @description  Zoekt naar 'DebiteurNr' (robuust), extraheert de nummerieke waarde en verandert deze in een directe link naar Heldere Inzage.
 // @author       Gijs Hofman
-// @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/calls_vw.asp*
+// @match        https://heldertelecom.chainwisehosted.nl/modules/relatiebeheer/bedr_vw.asp*
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
