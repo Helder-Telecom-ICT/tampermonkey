@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chainwise Debiteurnummer Linker
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      2025.1.1
 // @description  Zoekt naar 'DebiteurNr' (robuust), extraheert de nummerieke waarde en verandert deze in een directe link naar Heldere Inzage.
 // @author       Gijs Hofman
 // @match        https://heldertelecom.chainwisehosted.nl/modules/relatiebeheer/bedr_vw.asp*

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Chainwise Optimalisatie Statusoverzichten
 // @namespace    http://tampermonkey.net/
-// @version      2.11 (CSS Fixed)
+// @version      2025.1.1
 // @description  Mutaties aan Status overzichten in Chainwise zodat het overzichterlijker is.
 // @author       Gijs Hofman
 // @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/statusoverzicht_calls_vw.asp*
@@ -9,6 +9,7 @@
 // @run-at       document-idle
 // @downloadURL https://update.greasyfork.org/scripts/552129/Chainwise%20Optimalisatie%20Statusoverzichten.user.js
 // @updateURL https://update.greasyfork.org/scripts/552129/Chainwise%20Optimalisatie%20Statusoverzichten.meta.js
+// @license MIT
 // ==/UserScript==
 
 (function() {

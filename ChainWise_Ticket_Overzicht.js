@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         ChainWise Ticket Overzicht
 // @namespace    http://tampermonkey.net/
-// @version      10.0
+// @version      2025.1.1
 // @description  Toont 'live', klikbare samenvatting met dynamische kolom-indexering.
 // @author       Gemini
-// @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/calls_vw.asp*
+// @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/*
 // @grant        none
 // @run-at       document-idle
+// @license MIT
 // ==/UserScript==
 
 (function() {
