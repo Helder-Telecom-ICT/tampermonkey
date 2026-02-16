@@ -1,0 +1,160 @@
+// ==UserScript==
+// @name         ChainWise - kopieer Aan/CC/BCC uit "verstuurde mail" info-icoon
+// @namespace    heldertelecom
+// @version      1.1
+// @description  Klik op info-icoon bij "verstuurde mail" om Aan/CC/BCC adressen te kopiëren naar klembord
+// @match        https://heldertelecom.chainwisehosted.nl/modules/helpdesk/*
+// @grant        GM_setClipboard
+// @run-at       document-idle
+// ==/UserScript==
+
+(function () {
+  'use strict';
+
+  // Alleen info-icoontjes die bij een popover horen waar minimaal "Aan:" in zit
+  const ICON_SELECTOR = 'a.normaltext[data-content*="Aan:"] i.fa-info-circle, a.normaltext[data-content*="Aan:"] i.fa-info-circle-o';
+
+  // Voorkom dat bootstrap popover opent; klik = alleen kopiëren
+  const PREVENT_POPOVER = true;
+
+  // Outlook-vriendelijk scheidingsteken
+  const JOIN_WITH = '; ';
+
+  function stripHtml(s) {
+    return (s || '')
+      .replace(/<\s*br\s*\/?>/gi, '\n')
+      .replace(/<\/p\s*>/gi, '\n')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\r/g, '')
+      .replace(/[ \t]+/g, ' ')
+      .replace(/\n\s+/g, '\n')
+      .trim();
+  }
+
+  function extractEmails(text) {
+    const emailRegex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig;
+    const out = [];
+    let m;
+    while ((m = emailRegex.exec(text)) !== null) out.push(m[0]);
+    return out;
+  }
+
+  function parseAans(dataContent) {
+    const clean = stripHtml(dataContent);
+
+    // We proberen per label te pakken: Aan:, CC:, BCC: (case-insensitive)
+    // Neem alles na het label tot het volgende label of einde.
+    const labels = ['Aan', 'CC', 'BCC'];
+    const blocks = [];
+
+    for (const label of labels) {
+      const re = new RegExp(`(?:^|\\n|\\s)${label}:\\s*([\\s\\S]*?)(?=\\n\\s*(?:Aan|CC|BCC)\\s*:|$)`, 'i');
+      const m = clean.match(re);
+      if (m && m[1]) blocks.push(m[1].trim());
+    }
+
+    // Fallback: als parsing mislukt, pak alle emails uit de hele string
+    const pool = blocks.length ? blocks.join('\n') : clean;
+
+    const emails = extractEmails(pool);
+
+    // Unique + behoud volgorde
+    const seen = new Set();
+    const unique = [];
+    for (const e of emails) {
+      const k = e.toLowerCase();
+      if (!seen.has(k)) {
+        seen.add(k);
+        unique.push(e);
+      }
+    }
+    return unique;
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      try {
+        GM_setClipboard(text, 'text');
+        return true;
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+      }
+    }
+  }
+
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.textContent = msg;
+    el.style.position = 'fixed';
+    el.style.zIndex = '999999';
+    el.style.right = '16px';
+    el.style.bottom = '16px';
+    el.style.padding = '10px 12px';
+    el.style.borderRadius = '8px';
+    el.style.background = 'rgba(0,0,0,0.82)';
+    el.style.color = '#fff';
+    el.style.fontSize = '13px';
+    el.style.boxShadow = '0 6px 18px rgba(0,0,0,0.25)';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1400);
+  }
+
+  function bind(iconEl) {
+    if (!iconEl || iconEl.dataset.tmBound === '1') return;
+    iconEl.dataset.tmBound = '1';
+
+    const a = iconEl.closest('a[data-content]');
+    if (!a) return;
+
+    a.setAttribute('title', 'Klik om Aan/CC/BCC te kopiëren');
+
+    // capture=true zodat we vóór bootstrap handler zitten
+    a.addEventListener('click', async (ev) => {
+      if (PREVENT_POPOVER) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+      }
+
+      const data = a.getAttribute('data-content') || '';
+      const emails = parseAans(data);
+
+      if (!emails.length) {
+        toast('Geen e-mailadres gevonden');
+        return;
+      }
+
+      const text = emails.join(JOIN_WITH);
+      const ok = await copyText(text);
+      toast(ok ? `Gekopieerd (${emails.length}): ${text}` : 'Kopiëren mislukt');
+    }, true);
+  }
+
+  function scan(root = document) {
+    root.querySelectorAll(ICON_SELECTOR).forEach(bind);
+  }
+
+  scan();
+
+  const obs = new MutationObserver((muts) => {
+    for (const m of muts) {
+      for (const node of m.addedNodes) {
+        if (!(node instanceof HTMLElement)) continue;
+        scan(node);
+      }
+    }
+  });
+  obs.observe(document.documentElement, { childList: true, subtree: true });
+})();
