@@ -1,29 +1,50 @@
 // ==UserScript==
-// @name         Cubics - Standaardtekst
+// @name         Cubics - Standaard inloggegevens
 // @namespace    https://secret.cubics.cloud/
-// @version      1.1.0
-// @description  Vult automatisch de vier standaardvelden in.
+// @version      1.3.0
+// @description  Vult zes regels in bij een nieuw bericht.
 // @match        https://secret.cubics.cloud/*
-// @run-at       document-idle
+// @run-at       document-end
 // @grant        none
 // ==/UserScript==
 
 (function () {
     'use strict';
 
-    const standaardtekst = `Gebruikersnaam: 
-Wachtwoord: 
-Hostnaam: 
-Tenantnaam: `;
+    function invullen() {
+        if (location.pathname !== '/' || location.search) return;
 
-    const tekstvak = document.querySelector(
-        'form[method="POST"] textarea#secret[name="secret"]'
-    );
+        var tekstvak = document.getElementById('secret');
 
-    if (!tekstvak || tekstvak.readOnly || tekstvak.disabled ||
-        tekstvak.value.trim() !== '') return;
+        if (!tekstvak || tekstvak.tagName !== 'TEXTAREA' ||
+            tekstvak.readOnly || tekstvak.disabled) return;
 
-    tekstvak.value = standaardtekst;
-    tekstvak.dispatchEvent(new Event('input', { bubbles: true }));
-    tekstvak.dispatchEvent(new Event('change', { bubbles: true }));
+        if (tekstvak.value.trim() === '') {
+            tekstvak.value = [
+                'Gebruikersnaam: ',
+                'Wachtwoord: ',
+                'Hostnaam: xelionXX.helderbellen.nl',
+                'Tenantnaam: pbxX',
+                'Intern Nummer: 2XX',
+                'Direct Nummer: +31XXXXXXXXX'
+            ].join('\n');
+
+            tekstvak.dispatchEvent(
+                new Event('input', { bubbles: true })
+            );
+            tekstvak.dispatchEvent(
+                new Event('change', { bubbles: true })
+            );
+        }
+
+        tekstvak.style.height = '200px';
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener(
+            'DOMContentLoaded', invullen, { once: true }
+        );
+    } else {
+        invullen();
+    }
 })();
