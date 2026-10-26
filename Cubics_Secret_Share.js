@@ -1,50 +1,60 @@
-// ==UserScript==
-// @name         Cubics - Standaard inloggegevens
-// @namespace    https://secret.cubics.cloud/
-// @version      1.3.0
-// @description  Vult zes regels in bij een nieuw bericht.
-// @match        https://secret.cubics.cloud/*
-// @run-at       document-end
-// @grant        none
-// ==/UserScript==
 
-(function () {
-    'use strict';
+ // ==UserScript==
+ // @name         Cubics - Standaard inloggegevens
+ // @namespace    https://secret.cubics.cloud/
+ // @version      1.3.1
+ // @By           Nicky Oomen
+ // @description  Vult standaardgegevens in bij een nieuw bericht.
+ // @match        https://secret.cubics.cloud/*
+ // @run-at       document-idle
+ // @grant        none
+ // ==/UserScript==
 
-    function invullen() {
-        if (location.pathname !== '/' || location.search) return;
+ (function () {
+     'use strict';
 
-        var tekstvak = document.getElementById('secret');
+     const regels = [
+         'Gebruikersnaam: ',
+         'Wachtwoord: ',
+         'Hostnaam: xelionXX.helderbellen.nl',
+         'Tenantnaam: pbxX',
+         'Intern Nummer: 2XX',
+         'Direct Nummer: +31XXXXXXXXX'
+     ].join('\n');
 
-        if (!tekstvak || tekstvak.tagName !== 'TEXTAREA' ||
-            tekstvak.readOnly || tekstvak.disabled) return;
+     function invullen() {
+         if (location.pathname !== '/' || location.search) return true;
 
-        if (tekstvak.value.trim() === '') {
-            tekstvak.value = [
-                'Gebruikersnaam: ',
-                'Wachtwoord: ',
-                'Hostnaam: xelionXX.helderbellen.nl',
-                'Tenantnaam: pbxX',
-                'Intern Nummer: 2XX',
-                'Direct Nummer: +31XXXXXXXXX'
-            ].join('\n');
+         const tekstvak = document.getElementById('secret');
 
-            tekstvak.dispatchEvent(
-                new Event('input', { bubbles: true })
-            );
-            tekstvak.dispatchEvent(
-                new Event('change', { bubbles: true })
-            );
-        }
+         if (!tekstvak || tekstvak.tagName !== 'TEXTAREA') {
+             return false;
+         }
 
-        tekstvak.style.height = '200px';
-    }
+         if (tekstvak.disabled || tekstvak.readOnly) return true;
 
-    if (document.readyState === 'loading') {
-        document.addEventListener(
-            'DOMContentLoaded', invullen, { once: true }
-        );
-    } else {
-        invullen();
-    }
-})();
+         if (!tekstvak.value.trim()) {
+             tekstvak.value = regels;
+             tekstvak.dispatchEvent(
+                 new Event('input', { bubbles: true })
+             );
+             tekstvak.dispatchEvent(
+                 new Event('change', { bubbles: true })
+             );
+         }
+
+         tekstvak.style.minHeight = '200px';
+         return true;
+     }
+
+     if (!invullen()) {
+         const observer = new MutationObserver(() => {
+             if (invullen()) observer.disconnect();
+         });
+
+         observer.observe(document.documentElement, {
+             childList: true,
+             subtree: true
+         });
+     }
+ })();
