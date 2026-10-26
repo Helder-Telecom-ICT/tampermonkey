@@ -3,11 +3,12 @@
  // @name         Cubics - Standaard inloggegevens
  // @namespace    https://secret.cubics.cloud/
  // @version      1.3.1
- // @By           Nicky Oomen
+ // @author          Nicky Oomen
  // @description  Vult standaardgegevens in bij een nieuw bericht.
  // @match        https://secret.cubics.cloud/*
  // @run-at       document-idle
  // @grant        none
+ // @license MIT
  // ==/UserScript==
 
  (function () {
